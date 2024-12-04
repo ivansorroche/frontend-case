@@ -9,58 +9,36 @@ import "./index.css";
 function Todo() {
   const [items, setItems] = useState(TODO_LIST);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [search, setSearch] = useState("");
 
-  const handleChange = (event: ChangeEvent<unknown>) => {
-    setSearchInputValue(event.target.value);
-  };
-
-  const handleSearch = (event) => {
+  const handleSearch = (event:any) => {
     event.preventDefault();
-    setSearch(searchInputValue);
+    const itemFiltered = items.filter((item) => item.title.includes(searchInputValue))
+
+    setItems(itemFiltered)
   };
 
-  const handleDeleteTask = (id: number) => {
-    const editedItems = [];
-
-    items.map((item) => {
-      if (item.id !== id) {
-        editedItems.push(item);
-      }
-    })
-
-    setItems(editedItems);
+  const handleDeleteTask = (id: string) => {
+    const newList = items.filter((item) => item.id !== id)
+    setItems(newList)
   };
 
-  const handleChangeTaskStatus = (id: string, status: ITodoTypes) => {
-    const reversedStatus = status === "pending" ? "pending" : "done";
-    const editedItems = [];
-
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].id === id) {
-        editedItems.push({
-          ...items[i],
-          status: reversedStatus,
-        });
-      } else {
-        editedItems.push(items[i]);
-      }
-    }
-
-    setItems(editedItems);
+  const handleChangeTaskStatus = (title: string, status: ITodoTypes) => {
+    setItems((prevList) =>
+      prevList.map((item) =>
+        item.title === title ? { ...item, status: status === 'pending' ? 'done' : 'pending' } : item
+      )
+    )
   };
 
   useEffect(() => {
-    if (search || items)
-      setItems((currentItems) => [
-        ...currentItems,
-        ...TODO_LIST.filter((item) => item.title.includes(search)),
-      ]);
-  }, [search, items]);
+    if ( searchInputValue === '') {
+      setItems(TODO_LIST)
+    } 
+
+  }, [searchInputValue]);
 
   return (
     <main id="page" className="todo">
-      <div>
         <img src={logoImage} alt="Cora" title="Cora"></img>
         <h1>Weekly to-do list &#128467;</h1>
         <h2>
@@ -82,11 +60,13 @@ function Todo() {
             <input
               id="search"
               placeholder="busca por texto..."
-              value={searchValue}
-              onChange={handleChange}
+              value={searchInputValue}
+              onChange={(e) => setSearchInputValue(e.target.value)}
             />
             <button type="submit">buscar</button>
           </form>
+
+
           <ul className="todo__list">
             {items.length === 0 && (
               <span>
@@ -94,11 +74,11 @@ function Todo() {
                 &#128533;
               </span>
             )}
-            {items.map((item, i) => {
+            {items.map((item:any, i) => {
               return (
                 <li>
                   <span>
-                    {i}
+                    {i + 1}
                     {item.required ? "*" : ""}.
                   </span>
                   <div className="todo__content">
@@ -109,7 +89,7 @@ function Todo() {
                     <p>{item.description}</p>
                     {item.links && item.links.length > 0 && (
                       <div className="todo__links">
-                        {item.links.map((link) => (
+                        {item.links.map((link:any) => (
                           <a key={link.name} target="_blank" href={link.url}>
                             {link.name}
                           </a>
@@ -117,12 +97,12 @@ function Todo() {
                       </div>
                     )}
                     <div className="todo__actions">
-                      <button onClick={() => handleDeleteTask(item.uuid)}>
+                      <button onClick={() => handleDeleteTask(item.id)}>
                         delete
                       </button>
                       <button
                         onClick={() =>
-                          handleChangeTaskStatus(item.id, item.status)
+                          handleChangeTaskStatus(item.title, item.status)
                         }
                       >
                         change to{" "}
@@ -131,13 +111,12 @@ function Todo() {
                         </strong>
                       </button>
                     </div>
-                  <div>
+                  </div>
                 </li>
               );
             })}
           </ul>
         </div>
-      </div>
     </main>
   );
 }

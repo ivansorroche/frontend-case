@@ -1,8 +1,9 @@
 import logoImage from "./assets/logo.svg";
-// import Todo from "./Todo";
 // import { IBanking } from "./IBanking";
 
 import "./App.css";
+
+
 
 function App() {
   return (
@@ -23,10 +24,10 @@ function App() {
         </p>
         <ul className="buttons">
           <li>
-            <a href="#">TO-DO LIST</a>
+            <a href="/Todo">TO-DO LIST</a>
           </li>
           <li>
-            <a href="#">IBANKING</a>
+            <a href="/Login">IBANKING</a>
           </li>
         </ul>
       </div>

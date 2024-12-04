@@ -98,7 +98,7 @@ export const TODO_LIST = [
         <br />O contrato esta no <strong>README.md</strong> do projeto.
       </>
     ),
-    status: "pendin",
+    status: "pending",
     required: true,
     links: [
       {
@@ -112,7 +112,7 @@ export const TODO_LIST = [
     ],
   },
   {
-    id: "5ce31291-d06b-4940-9d14-0f41d116fe76",
+    id: "5ce31291-d06b-4940-9d14-0f41d116fe75",
     ref: "1",
     title: "Filtro por tipo de transação",
     description: (
